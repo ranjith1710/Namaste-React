@@ -2,29 +2,33 @@ import resList from "../utils/mockData";
 import Restaurant from "./Restaurant";
 import { useState, useEffect } from "react";
 import Shimmer from "./Shimmer";
+import { Link } from "react-router-dom";
 const Body = () => {
   const [listOfRestaurant, setListOfRestaurant] = useState([]);
   const [filteredRestaurant, setFilteredRestaurant] = useState([]);
   const [searchText, setSearchText] = useState("");
-
   //this will be called only once after the component renders for the first time
   useEffect(() => {
-    // console.log("use Effect called");
+    console.log("use Effect called in body called");
     fetchData();
   }, []);
 
   const fetchData = async () => {
-    let localResList = [];
-    // console.log("fetch data called");
-    const data = await fetch(
-      "https://www.swiggy.com/dapi/restaurants/list/v5?lat=12.9678217&lng=80.2185006&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING"
-    );
-    const json = await data.json();
-    const restaurants =
-      json?.data?.cards[2]?.card?.card?.gridElements?.infoWithStyle
-        ?.restaurants;
-    setListOfRestaurant(restaurants);
-    setFilteredRestaurant(restaurants);
+    try {
+      let localResList = [];
+      console.log("fetch data in body called");
+      const data = await fetch(
+        "https://www.swiggy.com/dapi/restaurants/list/v5?lat=12.9678217&lng=80.2185006&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING"
+      );
+      const json = await data.json();
+      const restaurants =
+        json?.data?.cards[2]?.card?.card?.gridElements?.infoWithStyle
+          ?.restaurants;
+      setListOfRestaurant(restaurants);
+      setFilteredRestaurant(restaurants);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return !listOfRestaurant || listOfRestaurant.length === 0 ? (
@@ -37,7 +41,6 @@ const Body = () => {
           value={searchText}
           onChange={e => {
             const value = e.target.value;
-
             //if value is empty or undefined then show all the restaurants
             if (!value || value == "") {
               setFilteredRestaurant(listOfRestaurant);
@@ -45,7 +48,6 @@ const Body = () => {
             setSearchText(value);
           }}
         />
-
         <button
           onClick={() => {
             const filteredRestaurants = !searchText
@@ -53,8 +55,7 @@ const Body = () => {
               : filteredRestaurant.filter(res =>
                   res.info.name.toLowerCase().includes(searchText)
                 );
-            // console.log("Filter in search");
-            // console.log(filteredRestaurants);
+
             setFilteredRestaurant(filteredRestaurants);
           }}
         >
@@ -75,7 +76,12 @@ const Body = () => {
 
       <div className="res-container">
         {filteredRestaurant.map(restaurant => (
-          <Restaurant key={restaurant?.info?.id} resData={restaurant} />
+          <Link
+            key={restaurant?.info?.id}
+            to={"/restaurants/" + restaurant?.info?.id}
+          >
+            <Restaurant resData={restaurant} />
+          </Link>
         ))}
       </div>
     </div>
