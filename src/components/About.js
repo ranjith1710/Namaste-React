@@ -22,6 +22,7 @@ class About extends React.Component {
           location={"Chennai (class)"}
           index={1}
         />
+        <User name={"Ranjith (function) "} location={"Chennai (function)"} />
       </div>
     );
   }
