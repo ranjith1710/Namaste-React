@@ -8,6 +8,7 @@ const RestaurantMenu = () => {
   const [resInfo, setResInfo] = useState([]);
   const [menuType, setMenuType] = useState("All");
   const [filteredMenu, setFilteredMenu] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const { resId } = useParams();
 
   useEffect(() => {
@@ -26,12 +27,13 @@ const RestaurantMenu = () => {
         data?.cards[2]?.groupedCard?.cardGroupMap?.REGULAR?.cards[2]?.card
           ?.card;
       setFilteredMenu(itemCards);
+      setIsLoading(false);
     } catch (error) {
       console.log(error);
     }
   };
 
-  if (!filteredMenu || filteredMenu.length === 0) {
+  if (isLoading) {
     return <Shimmer />;
   }
 
@@ -43,7 +45,7 @@ const RestaurantMenu = () => {
         ?.card;
     if (value == "All") {
       setFilteredMenu(itemCards);
-    } else {
+    } else if (itemCards) {
       const filtered = itemCards.filter(
         item => item?.card?.info?.itemAttribute?.vegClassifier == value
       );

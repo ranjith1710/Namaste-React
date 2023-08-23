@@ -117,11 +117,7 @@
   justify-content: space-evenly;
 }
 
-/* .res-rating {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  padding: 2px;
-  border: 2px solid black; 
-} */
+.user-card {
+  border: 2px solid black;
+  margin: 2px;
+}
