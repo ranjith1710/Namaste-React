@@ -1,37 +1,29 @@
-import { useEffect, useState } from "react";
-import { MENU_URL } from "../utils/constants";
+import { useState } from "react";
 import { useParams } from "react-router-dom";
 import Shimmer from "./Shimmer";
 import MenuItem from "./MenuItem";
+import useRestaurantMenu from "../utils/useRestaurantMenu";
 
 const RestaurantMenu = () => {
-  const [resInfo, setResInfo] = useState([]);
   const [menuType, setMenuType] = useState("All");
   const [filteredMenu, setFilteredMenu] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
   const { resId } = useParams();
 
-  useEffect(() => {
-    console.log("use effect in fetch menu called");
-    fetchMenu();
-  }, []);
+  console.log("start");
+  const [resInfo, isLoading, isUpdateFilteredMenu] = useRestaurantMenu(resId);
+  console.log("Res menu " + isLoading);
+  console.log("Is Filtered menu needs to be updated " + isUpdateFilteredMenu);
 
-  const fetchMenu = async () => {
-    try {
-      console.log("fetch menu called");
-      const response = await fetch(MENU_URL + resId);
-      const json = await response.json();
-      const { data } = json;
-      setResInfo(data);
-      const { itemCards } =
-        data?.cards[2]?.groupedCard?.cardGroupMap?.REGULAR?.cards[2]?.card
-          ?.card;
-      setFilteredMenu(itemCards);
-      setIsLoading(false);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  //Will be used to set menu items to filteredMenu
+  if (isUpdateFilteredMenu) {
+    const { itemCards } =
+      resInfo?.cards[2]?.groupedCard?.cardGroupMap?.REGULAR?.cards[2]?.card
+        ?.card;
+    console.log("assigning values to filtered menu");
+    setFilteredMenu(itemCards);
+  }
+
+  console.log("below filtered menu");
 
   if (isLoading) {
     return <Shimmer />;
@@ -55,6 +47,7 @@ const RestaurantMenu = () => {
     console.log(value);
   };
 
+  console.log("above return");
   return (
     <div className="res-menu">
       <div className="res-data">

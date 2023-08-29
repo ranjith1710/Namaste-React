@@ -1,17 +1,22 @@
-import resList from "../utils/mockData";
 import Restaurant from "./Restaurant";
 import { useState, useEffect } from "react";
 import Shimmer from "./Shimmer";
 import { Link } from "react-router-dom";
+import useOnlineStatus from "../utils/useOnlineStatus";
+
 const Body = () => {
   const [listOfRestaurant, setListOfRestaurant] = useState([]);
   const [filteredRestaurant, setFilteredRestaurant] = useState([]);
   const [searchText, setSearchText] = useState("");
+
+  console.log("Body rendered");
   //this will be called only once after the component renders for the first time
   useEffect(() => {
     console.log("use Effect called in body called");
     fetchData();
   }, []);
+
+  console.log("code below use effect");
 
   const fetchData = async () => {
     try {
@@ -30,6 +35,15 @@ const Body = () => {
       console.log(error);
     }
   };
+
+  const onlineStatus = useOnlineStatus();
+
+  console.log("online status fetched");
+  if (onlineStatus === false) {
+    return (
+      <h1>Looks like you are offline. Please check your internet connection</h1>
+    );
+  }
 
   return !listOfRestaurant || listOfRestaurant.length === 0 ? (
     <Shimmer />

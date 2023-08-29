@@ -1,5 +1,5 @@
 // importing React and ReactDOM
-import React from "react";
+import React, { Suspense, lazy } from "react";
 import ReactDOM from "react-dom/client";
 import "../style.css";
 import Header from "./components/Header";
@@ -9,6 +9,10 @@ import Contact from "./components/Contact";
 import Error from "./components/Error";
 import RestaurantMenu from "./components/RestaurantMenu";
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
+import Shimmer from "./components/Shimmer";
+
+//lazy loading, code splitting, chunking, dynamic bundling, dynamic import, on demand loading
+const Grocery = lazy(() => import("./components/Grocery"));
 
 const App = () => {
   return (
@@ -39,6 +43,14 @@ const router = createBrowserRouter([
       {
         path: "/contact",
         element: <Contact />
+      },
+      {
+        path: "/grocery",
+        element: (
+          <Suspense fallback={<Shimmer />}>
+            <Grocery />
+          </Suspense>
+        )
       },
       {
         path: "/restaurants/:resId",
