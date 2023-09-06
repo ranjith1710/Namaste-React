@@ -1,27 +1,33 @@
-import Restaurant from "./Restaurant";
-import { useState, useEffect } from "react";
+import Restaurant, { withMoreRatings, withMoreRatings2 } from "./Restaurant";
+import { useState, useEffect, useContext } from "react";
 import Shimmer from "./Shimmer";
 import { Link } from "react-router-dom";
 import useOnlineStatus from "../utils/useOnlineStatus";
+import UserContext from "../utils/UserContext";
 
 const Body = () => {
   const [listOfRestaurant, setListOfRestaurant] = useState([]);
   const [filteredRestaurant, setFilteredRestaurant] = useState([]);
   const [searchText, setSearchText] = useState("");
 
-  console.log("Body rendered");
+  const { loggedInUser, setUserName } = useContext(UserContext);
+  //  console.log("Body rendered");
+  // console.log(listOfRestaurant);
+
+  const RestaurantWithMoreRating = withMoreRatings(Restaurant);
+
   //this will be called only once after the component renders for the first time
   useEffect(() => {
-    console.log("use Effect called in body called");
+    // console.log("use Effect called in body called");
     fetchData();
   }, []);
 
-  console.log("code below use effect");
+  // console.log("code below use effect");
 
   const fetchData = async () => {
     try {
       let localResList = [];
-      console.log("fetch data in body called");
+      // console.log("fetch data in body called");
       const data = await fetch(
         "https://www.swiggy.com/dapi/restaurants/list/v5?lat=12.9678217&lng=80.2185006&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING"
       );
@@ -38,7 +44,7 @@ const Body = () => {
 
   const onlineStatus = useOnlineStatus();
 
-  console.log("online status fetched");
+  // console.log("online status fetched");
   if (onlineStatus === false) {
     return (
       <h1>Looks like you are offline. Please check your internet connection</h1>
@@ -48,9 +54,10 @@ const Body = () => {
   return !listOfRestaurant || listOfRestaurant.length === 0 ? (
     <Shimmer />
   ) : (
-    <div className="body">
-      <div className="btn">
+    <div>
+      <div className="m-5">
         <input
+          className="border border-black rounded-md"
           type="text"
           value={searchText}
           onChange={e => {
@@ -63,6 +70,7 @@ const Body = () => {
           }}
         />
         <button
+          className="ml-2 px-4 py-1 bg-orange-400 rounded-lg"
           onClick={() => {
             const filteredRestaurants = !searchText
               ? listOfRestaurant
@@ -76,7 +84,7 @@ const Body = () => {
           Search
         </button>
         <button
-          className="filter-btn"
+          className="ml-5 bg-lime-400 px-5 py-1 rounded-lg"
           onClick={() => {
             const topRatedRestaurants = listOfRestaurant.filter(
               item => item.info.avgRating > 4.0
@@ -86,15 +94,27 @@ const Body = () => {
         >
           Top Rated Restaurant
         </button>
+        <input
+          className="border border-black rounded-md pl-1 ml-5"
+          type="text"
+          value={loggedInUser}
+          onChange={e => {
+            setUserName(e.target.value);
+          }}
+        />
       </div>
 
-      <div className="res-container">
+      <div className="flex flex-wrap">
         {filteredRestaurant.map(restaurant => (
           <Link
             key={restaurant?.info?.id}
             to={"/restaurants/" + restaurant?.info?.id}
           >
-            <Restaurant resData={restaurant} />
+            {restaurant?.info?.avgRating >= 4.0 ? (
+              <RestaurantWithMoreRating resData={restaurant} />
+            ) : (
+              <Restaurant resData={restaurant} />
+            )}
           </Link>
         ))}
       </div>

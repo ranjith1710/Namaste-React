@@ -1,25 +1,48 @@
 // importing React and ReactDOM
-import React, { Suspense, lazy } from "react";
+import React, { Suspense, lazy, useContext, useState } from "react";
 import ReactDOM from "react-dom/client";
-import "../style.css";
+import "../index.css";
 import Header from "./components/Header";
 import Body from "./components/Body";
-import About from "./components/About";
 import Contact from "./components/Contact";
 import Error from "./components/Error";
 import RestaurantMenu from "./components/RestaurantMenu";
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import Shimmer from "./components/Shimmer";
+import UserContext from "./utils/UserContext";
 
 //lazy loading, code splitting, chunking, dynamic bundling, dynamic import, on demand loading
 const Grocery = lazy(() => import("./components/Grocery"));
-
+const About = lazy(() => import("./components/About"));
 const App = () => {
+  const contextData = useContext(UserContext);
+
+  const [userName, setUserName] = useState(contextData.loggedInUser);
+  // console.log("Display context data below");
+  // console.log(contextData);
+
   return (
-    <div className="App">
-      <Header />
-      <Outlet />
-    </div>
+    // value for loggedInUser will be passed as default value given while creating context
+    <UserContext.Provider
+      value={{
+        //updating the loggedInUser
+        loggedInUser: userName,
+        setUserName
+      }}
+    >
+      <div className="App">
+        {/* value for loggedInUser will be passed as Ranjith only for components inside the below provider */}
+        <UserContext.Provider
+          value={{
+            //since it is hardcoded, loggedInUser will always be Ranjith and it will not be updated for components(Header) inside this provider
+            loggedInUser: "Ranjith"
+          }}
+        >
+          <Header />
+        </UserContext.Provider>
+        <Outlet />
+      </div>
+    </UserContext.Provider>
   );
 };
 
@@ -38,7 +61,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/about",
-        element: <About />
+        element: (
+          <Suspense fallback={<Shimmer />}>
+            <About />
+          </Suspense>
+        )
       },
       {
         path: "/contact",
