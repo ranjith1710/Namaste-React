@@ -6,7 +6,7 @@ import useRestaurantMenu from "../utils/useRestaurantMenu";
 import RestaurantCategory from "./RestaurantCategory";
 
 const RestaurantMenu = () => {
-  const [menuType, setMenuType] = useState(null);
+  const [menuType, setMenuType] = useState("All");
   const [filteredMenu, setFilteredMenu] = useState([]);
   const [showIndex, setShowIndex] = useState(null);
 
@@ -53,7 +53,7 @@ const RestaurantMenu = () => {
         ?.card;
     if (value == "All") {
       setFilteredMenu(itemCards);
-      setMenuType(null);
+      setMenuType("All");
     } else if (itemCards) {
       const filtered = itemCards.filter(
         item => item?.card?.info?.itemAttribute?.vegClassifier == value
@@ -71,7 +71,6 @@ const RestaurantMenu = () => {
       <div>
         <h1 className="font-bold text-4xl m-3">{name}</h1>
       </div>
-
       <div className=" w-2/12 flex justify-between">
         <div>
           <input
@@ -79,7 +78,7 @@ const RestaurantMenu = () => {
             name="menu-type"
             value="All"
             onChange={e => handleItemFilter(e)}
-            checked={menuType == null}
+            checked={menuType === "All"}
           />
           <label htmlFor="All" className="ml-1">
             All
@@ -92,7 +91,7 @@ const RestaurantMenu = () => {
             name="menu-type"
             value="VEG"
             onChange={e => handleItemFilter(e)}
-            checked={menuType == "VEG"}
+            checked={menuType === "VEG"}
           />
           <label htmlFor="Veg" className="ml-1">
             Veg
@@ -104,7 +103,7 @@ const RestaurantMenu = () => {
             name="menu-type"
             value="NONVEG"
             onChange={e => handleItemFilter(e)}
-            checked={menuType == "NONVEG"}
+            checked={menuType === "NONVEG"}
           />
           <label htmlFor="NonVeg" className="ml-1">
             Non-Veg

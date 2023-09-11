@@ -10,6 +10,9 @@ import RestaurantMenu from "./components/RestaurantMenu";
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import Shimmer from "./components/Shimmer";
 import UserContext from "./utils/UserContext";
+import appStore from "./store/appStore";
+import { Provider } from "react-redux";
+import Cart from "./components/Cart";
 
 //lazy loading, code splitting, chunking, dynamic bundling, dynamic import, on demand loading
 const Grocery = lazy(() => import("./components/Grocery"));
@@ -30,18 +33,20 @@ const App = () => {
         setUserName
       }}
     >
-      <div className="App">
-        {/* value for loggedInUser will be passed as Ranjith only for components inside the below provider */}
-        <UserContext.Provider
-          value={{
-            //since it is hardcoded, loggedInUser will always be Ranjith and it will not be updated for components(Header) inside this provider
-            loggedInUser: "Ranjith"
-          }}
-        >
-          <Header />
-        </UserContext.Provider>
-        <Outlet />
-      </div>
+      <Provider store={appStore}>
+        <div className="App">
+          {/* value for loggedInUser will be passed as Ranjith only for components inside the below provider */}
+          <UserContext.Provider
+            value={{
+              //since it is hardcoded, loggedInUser will always be Ranjith and it will not be updated for components(Header) inside this provider
+              loggedInUser: "Ranjith"
+            }}
+          >
+            <Header />
+          </UserContext.Provider>
+          <Outlet />
+        </div>
+      </Provider>
     </UserContext.Provider>
   );
 };
@@ -78,6 +83,10 @@ const router = createBrowserRouter([
             <Grocery />
           </Suspense>
         )
+      },
+      {
+        path: "/cart",
+        element: <Cart />
       },
       {
         path: "/restaurants/:resId",

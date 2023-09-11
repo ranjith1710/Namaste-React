@@ -6,13 +6,13 @@ const useRestaurantMenu = resId => {
   const [isUpdateFilteredMenu, setIsUpdateFilteredMenu] = useState(false);
 
   useEffect(() => {
-    console.log("use effect in fetch menu called");
+    // console.log("use effect in fetch menu called");
     fetchMenu();
   }, []);
 
   const fetchMenu = async () => {
     try {
-      console.log("fetch menu called");
+      // console.log("fetch menu called");
       const response = await fetch(MENU_URL + resId);
       const json = await response.json();
       const { data } = json;

@@ -8,12 +8,13 @@ const RestaurantCategory = ({
 }) => {
   const { title, itemCards } = category;
   const itemList =
-    menuType == null
+    menuType == "All"
       ? itemCards
       : itemCards.filter(
           item => item?.card?.info?.itemAttribute?.vegClassifier == menuType
         );
 
+  // console.log(itemList);
   const handleItemShow = () => {
     setShowIndex(showItems ? false : true);
   };

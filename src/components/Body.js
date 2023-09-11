@@ -32,16 +32,18 @@ const Body = () => {
         "https://www.swiggy.com/dapi/restaurants/list/v5?lat=12.9678217&lng=80.2185006&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING"
       );
       const json = await data.json();
+      console.log(json);
       const restaurants =
         json?.data?.cards[2]?.card?.card?.gridElements?.infoWithStyle
           ?.restaurants;
+      // console.log(restaurants);
       setListOfRestaurant(restaurants);
       setFilteredRestaurant(restaurants);
     } catch (error) {
       console.log(error);
     }
   };
-
+  // console.log(filteredRestaurant);
   const onlineStatus = useOnlineStatus();
 
   // console.log("online status fetched");
