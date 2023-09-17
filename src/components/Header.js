@@ -12,7 +12,7 @@ const Header = () => {
   const onlineStatus = useOnlineStatus();
   const cartItems = useSelector(store => store.cart.items);
 
-  console.log(cartItems);
+  // console.log(cartItems);
   return (
     <div className="flex justify-between p-3">
       <div>
@@ -34,7 +34,7 @@ const Header = () => {
             <Link to="/grocery"> Grocery </Link>
           </li>
           <li className="p-5">
-            <Link to="/cart"> Cart ({cartItems.length})</Link>
+            <Link to="/cart">Cart - ({cartItems.length}) items</Link>
           </li>
           <button
             className="px-5 py-1 border border-gray-800"

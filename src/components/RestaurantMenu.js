@@ -11,7 +11,6 @@ const RestaurantMenu = () => {
   const [showIndex, setShowIndex] = useState(null);
 
   const { resId } = useParams();
-
   // console.log("start");
   const [resInfo, isLoading, isUpdateFilteredMenu] = useRestaurantMenu(resId);
   // console.log("Res menu " + isLoading);
@@ -76,6 +75,7 @@ const RestaurantMenu = () => {
           <input
             type="radio"
             name="menu-type"
+            id="All"
             value="All"
             onChange={e => handleItemFilter(e)}
             checked={menuType === "All"}
@@ -89,6 +89,7 @@ const RestaurantMenu = () => {
           <input
             type="radio"
             name="menu-type"
+            id="Veg"
             value="VEG"
             onChange={e => handleItemFilter(e)}
             checked={menuType === "VEG"}
@@ -101,6 +102,7 @@ const RestaurantMenu = () => {
           <input
             type="radio"
             name="menu-type"
+            id="NonVeg"
             value="NONVEG"
             onChange={e => handleItemFilter(e)}
             checked={menuType === "NONVEG"}

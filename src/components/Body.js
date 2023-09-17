@@ -32,7 +32,7 @@ const Body = () => {
         "https://www.swiggy.com/dapi/restaurants/list/v5?lat=12.9678217&lng=80.2185006&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING"
       );
       const json = await data.json();
-      console.log(json);
+      // console.log(json);
       const restaurants =
         json?.data?.cards[2]?.card?.card?.gridElements?.infoWithStyle
           ?.restaurants;
@@ -59,26 +59,30 @@ const Body = () => {
     <div>
       <div className="m-5">
         <input
+          data-testid="searchInput"
           className="border border-black rounded-md"
           type="text"
           value={searchText}
           onChange={e => {
             const value = e.target.value;
             //if value is empty or undefined then show all the restaurants
-            if (!value || value == "") {
-              setFilteredRestaurant(listOfRestaurant);
-            }
+            // if (!value || value == "") {
+            //   setFilteredRestaurant(listOfRestaurant);
+            // }
             setSearchText(value);
           }}
         />
         <button
           className="ml-2 px-4 py-1 bg-orange-400 rounded-lg"
           onClick={() => {
-            const filteredRestaurants = !searchText
-              ? listOfRestaurant
-              : filteredRestaurant.filter(res =>
-                  res.info.name.toLowerCase().includes(searchText)
-                );
+            const filteredRestaurants =
+              !searchText || searchText == ""
+                ? listOfRestaurant
+                : filteredRestaurant.filter(res =>
+                    res.info.name
+                      .toLowerCase()
+                      .includes(searchText.toLowerCase())
+                  );
 
             setFilteredRestaurant(filteredRestaurants);
           }}
@@ -88,16 +92,17 @@ const Body = () => {
         <button
           className="ml-5 bg-lime-400 px-5 py-1 rounded-lg"
           onClick={() => {
-            const topRatedRestaurants = listOfRestaurant.filter(
+            const topRatedRestaurants = filteredRestaurant.filter(
               item => item.info.avgRating > 4.0
             );
             setFilteredRestaurant(topRatedRestaurants);
           }}
         >
-          Top Rated Restaurant
+          Top Rated Restaurants
         </button>
         <input
           className="border border-black rounded-md pl-1 ml-5"
+          data-testid="userUpdateInput"
           type="text"
           value={loggedInUser}
           onChange={e => {

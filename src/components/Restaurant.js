@@ -5,8 +5,12 @@ const Restaurant = ({ resData }) => {
   const { name, cuisines, cloudinaryImageId, avgRating, sla } = resData.info;
   const { slaString } = sla;
   const { loggedInUser } = useContext(UserContext);
+  // console.log(resData);
   return (
-    <div className="w-44 m-5  border border-cyan-300  hover:shadow-zinc-600 shadow-lg">
+    <div
+      data-testid="resCard"
+      className="w-44 m-5  border border-cyan-300  hover:shadow-zinc-600 shadow-lg"
+    >
       <img
         className="border rounded-md"
         src={CDN_URL + cloudinaryImageId}

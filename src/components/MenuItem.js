@@ -9,7 +9,10 @@ const MenuItem = ({ item }) => {
     dispatch(addItem(item));
   };
   return (
-    <div className="w-full flex flex-row justify-between items-center m-3 pb-1 border-gray-300 border-b-2">
+    <div
+      data-testid="menuItem"
+      className="w-full flex flex-row justify-between items-center m-3 pb-1 border-gray-300 border-b-2"
+    >
       <div className="flex flex-col w-9/12">
         <h4 className="font-bold">{name}</h4>
         <p className="text-xs italic">Rs.{(defaultPrice || price) / 100}</p>
